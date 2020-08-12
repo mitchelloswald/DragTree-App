@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e028d9ed99397004f953c5f7ff3a90d8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - stagedText: {instanceID: 0}
+  - rightpreStageOne: {instanceID: 0}
+  - rightpreStageTwo: {instanceID: 0}
+  - leftpreStageOne: {instanceID: 0}
+  - leftpreStageTwe: {instanceID: 0}
+  - yellow: {fileID: 2100000, guid: 92621833a83968b4894ad7930006095a, type: 2}
+  - unlit: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
