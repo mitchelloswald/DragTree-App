@@ -179,7 +179,7 @@ public class TreeControler : MonoBehaviour
             rightFirstBulb.GetComponent<Renderer>().material = unlit;
             rightSecondBulb.GetComponent<Renderer>().material = unlit;
             rightThirdBulb.GetComponent<Renderer>().material = unlit;
-
+            
             //Figure RT Pro .5 Tree Also Using Rollout from save
             reactionTime = StageControl.buttonLetGo - RTtimer + rollOut - fiveTenthsPro;
             stageControl.displayRT();
@@ -190,8 +190,9 @@ public class TreeControler : MonoBehaviour
         else if (is5Full.isOn)
         {
             //Figure RT Full Tree
-          reactionTime = StageControl.buttonLetGo - RTtimer + rollOut - fiveTenthsFull;
-          stageControl.displayRT();
+            reactionTime = StageControl.buttonLetGo - RTtimer + rollOut - fiveTenthsFull;
+            stageControl.displayRT();
+            
             // Red or Green? 
             redOrGreen();
         }
@@ -210,6 +211,21 @@ public class TreeControler : MonoBehaviour
         }
 
 
+    }
+
+    // Waits For Player To UnStage To Then Figure Reaction Time
+    IEnumerator WaitForPlayerToUnStage()
+    {
+        yield return new WaitUntil(() => StageControl.isStaged == false);
+        if (is5Full.isOn)
+        {
+            rightThirdBulb.GetComponent<Renderer>().material = unlit;
+            RT();
+        }
+        else
+        {
+            RT();
+        }
     }
     void redOrGreen()
     {
@@ -237,35 +253,52 @@ public class TreeControler : MonoBehaviour
     IEnumerator FiveTenthsProTree()
     {
         yield return new WaitForSeconds(.5f);
-        RT();
+        StartCoroutine(WaitForPlayerToUnStage());
+       
     }
     IEnumerator FiveTenthsFullTree()
     {
         yield return new WaitForSeconds(.5f);
         rightFirstBulb.GetComponent<Renderer>().material = unlit;
-        fullTreeFire2();
+
+        //Check To See If They RedLighted Before Lighting Next Bulb
+        if (StageControl.isStaged == false)
+        {
+            RT();
+        }
+        else
+        {
+            fullTreeFire2();
+        }
 
     }
     IEnumerator FiveTenthsFullTree2()
     {
         yield return new WaitForSeconds(.5f);
         rightSecondBulb.GetComponent<Renderer>().material = unlit;
-        fullTreeFire3();
 
+        //Check To See If They RedLighted Before Lighting Next Bulb
+        if (StageControl.isStaged == false)
+        {
+            RT();
+        }
+        else
+        {
+            fullTreeFire3();
+
+        }
     }
     IEnumerator FiveTenthsFullTree3()
     {
         yield return new WaitForSeconds(.5f);
-        rightThirdBulb.GetComponent<Renderer>().material = unlit;
-        RT();
-
+        StartCoroutine(WaitForPlayerToUnStage());
     }
     IEnumerator FourTenthsProTree()
     {
         yield return new WaitForSeconds(.4f);
-        RT();
+        StartCoroutine(WaitForPlayerToUnStage());
     }
-    
+
     // Resets The Tree and RT so the tree can be Fired Again
     public void resetTree()
     {
