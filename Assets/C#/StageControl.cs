@@ -61,10 +61,21 @@ public class StageControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         reactionTimeString = TreeControler.reactionTime.ToString("0.0000");
         rtText.text = reactionTimeString;
+        
+        // Sets Color Reaction Time Text
+        if (TreeControler.reactionTime > 0)
+        {
+            rtText.color = Color.green;
+        }
+        if (TreeControler.reactionTime < 0)
+        {
+            rtText.color = Color.red;
+        }
     }
     public void resetRT()
     {
         reactionTimeString = zero.ToString();
         rtText.text = reactionTimeString;
+        rtText.color = Color.white;
     }
 }
