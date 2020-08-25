@@ -11,17 +11,21 @@ public class StageControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 {
     public Text stagedText;
     public TextMeshProUGUI rtText;
+    public TextMeshProUGUI botrtText;
     public double zero = 0.000;
     public GameObject rightpreStageOne;
     public GameObject rightpreStageTwo;
     public GameObject leftpreStageOne;
-    public GameObject leftpreStageTwe;
+    public GameObject leftpreStageTwo;
     public Material yellow;
     public Material unlit;
     public static float buttonLetGo;
     public static bool isStaged = false;
     private string reactionTimeString;
+    private string randomRT;
+
     float countDownTimer = TreeControler.timer;
+
 
 
 
@@ -37,6 +41,8 @@ public class StageControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         // Light The Stage Bulbs
         rightpreStageOne.GetComponent<Renderer>().material = yellow;
         rightpreStageTwo.GetComponent<Renderer>().material = yellow;
+
+        StartCoroutine(botStageDelay());
 
     }
 
@@ -56,11 +62,20 @@ public class StageControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         // UnLight The Stage Bulbs
         rightpreStageOne.GetComponent<Renderer>().material = unlit;
         rightpreStageTwo.GetComponent<Renderer>().material = unlit;
+
+
+        StartCoroutine(botUnStageDelay());
     }
     public void displayRT()
     {
+        // Turn Off Bots Stage Lights
+        leftpreStageOne.GetComponent<Renderer>().material = unlit;
+        leftpreStageTwo.GetComponent<Renderer>().material = unlit;
+        
         reactionTimeString = TreeControler.reactionTime.ToString("0.0000");
+        randomRT = TreeControler.randomRT.ToString("0.0000");
         rtText.text = reactionTimeString;
+        botrtText.text = randomRT;
         
         // Sets Color Reaction Time Text
         if (TreeControler.reactionTime > 0)
@@ -71,11 +86,47 @@ public class StageControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         {
             rtText.color = Color.red;
         }
+        // Sets Color Reaction Time Text
+        if (TreeControler.randomRT > 0)
+        {
+            botrtText.color = Color.green;
+        }
+        if (TreeControler.randomRT < 0)
+        {
+            botrtText.color = Color.red;
+        }
     }
     public void resetRT()
     {
         reactionTimeString = zero.ToString();
         rtText.text = reactionTimeString;
         rtText.color = Color.white;
+        botrtText.text = reactionTimeString;
+        botrtText.color = Color.white;
     }
+    IEnumerator botStageDelay()
+    {
+       yield return new WaitForSeconds(.2f);
+       stageBot();
+
+    }
+    IEnumerator botUnStageDelay()
+    {
+        yield return new WaitForSeconds(.2f);
+        unstageBot();
+
+    }
+
+    public void stageBot()
+    {
+        leftpreStageOne.GetComponent<Renderer>().material = yellow;
+        leftpreStageTwo.GetComponent<Renderer>().material = yellow;
+    }
+    public void unstageBot()
+    {
+        leftpreStageOne.GetComponent<Renderer>().material = unlit;
+        leftpreStageTwo.GetComponent<Renderer>().material = unlit;
+    }
+
+
 }

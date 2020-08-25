@@ -9,6 +9,9 @@ public class TreeControler : MonoBehaviour
     
     // The Random Start Varible
     public float randomStart;
+    
+    // Random Reaction Time The Bot Uses
+    public static float randomRT;
 
     // Has the random start number been created
     public bool randomStartGenerated = false;
@@ -22,6 +25,13 @@ public class TreeControler : MonoBehaviour
     public GameObject rightThirdBulb;
     public GameObject rightGreenBulb;
     public GameObject rightRedBulb;
+    public GameObject leftFirstBulb;
+    public GameObject leftSecondBulb;
+    public GameObject leftThirdBulb;
+    public GameObject leftGreenBulb;
+    public GameObject leftRedBulb;
+    public GameObject leftStageBulb;
+    public GameObject leftStageBulbTwo;
 
 
     // Color Matrials
@@ -79,11 +89,13 @@ public class TreeControler : MonoBehaviour
         // Check If Player is Staged
         if (StageControl.isStaged == true)
         {
-            // Check to see if a start time was Generated if not generate a random start time
+            // Check to see if a start time was Generated if not generate a random start time 
             if (randomStartGenerated == false)
             {
+                randomRT = generaterandomRT();
                 randomStart = randomStartTime();
             }
+
             if (hasTreeFired == false && randomStartGenerated == true)
             {
                 timer += Time.deltaTime;
@@ -113,6 +125,11 @@ public class TreeControler : MonoBehaviour
         rightSecondBulb.GetComponent<Renderer>().material = yellow;
         rightThirdBulb.GetComponent<Renderer>().material = yellow;
 
+        // Light 3 Left Bulbs
+        leftFirstBulb.GetComponent<Renderer>().material = yellow;
+        leftSecondBulb.GetComponent<Renderer>().material = yellow;
+        leftThirdBulb.GetComponent<Renderer>().material = yellow;
+        
         //Time When Tree Dropped
         RTtimer = Time.time;
 
@@ -128,6 +145,11 @@ public class TreeControler : MonoBehaviour
         rightFirstBulb.GetComponent<Renderer>().material = yellow;
         rightSecondBulb.GetComponent<Renderer>().material = yellow;
         rightThirdBulb.GetComponent<Renderer>().material = yellow;
+
+        // Light 3 Left Bulbs
+        leftFirstBulb.GetComponent<Renderer>().material = yellow;
+        leftSecondBulb.GetComponent<Renderer>().material = yellow;
+        leftThirdBulb.GetComponent<Renderer>().material = yellow;
 
         //Time When Tree Dropped
         RTtimer = Time.time;
@@ -145,7 +167,10 @@ public class TreeControler : MonoBehaviour
 
         // Light First Bulb
         rightFirstBulb.GetComponent<Renderer>().material = yellow;
-
+       
+        //light Left Bulbs
+        leftFirstBulb.GetComponent<Renderer>().material = yellow;
+        
         // Keep it on for .5 Seconds
         StartCoroutine(FiveTenthsFullTree());
 
@@ -156,6 +181,8 @@ public class TreeControler : MonoBehaviour
     {
         // Light Second Bulb
         rightSecondBulb.GetComponent<Renderer>().material = yellow;
+        leftSecondBulb.GetComponent<Renderer>().material = yellow;
+
 
         // Keep it on for .5 Seconds
         StartCoroutine(FiveTenthsFullTree2());
@@ -166,7 +193,9 @@ public class TreeControler : MonoBehaviour
 
         // Light Bottom Third Bulb
         rightThirdBulb.GetComponent<Renderer>().material = yellow;
-       
+        leftThirdBulb.GetComponent<Renderer>().material = yellow;
+
+
         // Keep it on for .5 Seconds
         StartCoroutine(FiveTenthsFullTree3());
 
@@ -179,7 +208,12 @@ public class TreeControler : MonoBehaviour
             rightFirstBulb.GetComponent<Renderer>().material = unlit;
             rightSecondBulb.GetComponent<Renderer>().material = unlit;
             rightThirdBulb.GetComponent<Renderer>().material = unlit;
-            
+
+            //Unlight Left Bulbs
+            leftFirstBulb.GetComponent<Renderer>().material = unlit;
+            leftSecondBulb.GetComponent<Renderer>().material = unlit;
+            leftThirdBulb.GetComponent<Renderer>().material = unlit;
+
             //Figure RT Pro .5 Tree Also Using Rollout from save
             reactionTime = StageControl.buttonLetGo - RTtimer + rollOut - fiveTenthsPro;
             stageControl.displayRT();
@@ -203,6 +237,11 @@ public class TreeControler : MonoBehaviour
             rightSecondBulb.GetComponent<Renderer>().material = unlit;
             rightThirdBulb.GetComponent<Renderer>().material = unlit;
 
+            //Unlight Left Bulbs
+            leftFirstBulb.GetComponent<Renderer>().material = unlit;
+            leftSecondBulb.GetComponent<Renderer>().material = unlit;
+            leftThirdBulb.GetComponent<Renderer>().material = unlit;
+
             reactionTime = StageControl.buttonLetGo - RTtimer + rollOut - fourTenths;
             stageControl.displayRT();
 
@@ -212,21 +251,6 @@ public class TreeControler : MonoBehaviour
 
 
     }
-
-    // Waits For Player To UnStage To Then Figure Reaction Time
-    IEnumerator WaitForPlayerToUnStage()
-    {
-        yield return new WaitUntil(() => StageControl.isStaged == false);
-        if (is5Full.isOn)
-        {
-            rightThirdBulb.GetComponent<Renderer>().material = unlit;
-            RT();
-        }
-        else
-        {
-            RT();
-        }
-    }
     void redOrGreen()
     {
         if (reactionTime < 0)
@@ -234,22 +258,57 @@ public class TreeControler : MonoBehaviour
             rightRedBulb.GetComponent<Renderer>().material = red;
 
         }
-        else
+        if (reactionTime >= 0)
         {
             rightGreenBulb.GetComponent<Renderer>().material = green;
+
+        }
+        if (randomRT < 0)
+        {
+            leftRedBulb.GetComponent<Renderer>().material = red;
+
+        }
+        if (randomRT >= 0)
+        {
+            leftGreenBulb.GetComponent<Renderer>().material = green;
 
         }
         //Wait To Reset the tree
         StartCoroutine(endOfTreePause());
     }
+    // Waits For Player To UnStage To Then Figure Reaction Time
+    IEnumerator WaitForPlayerToUnStage()
+    {
+        yield return new WaitUntil(() => StageControl.isStaged == false);
+        if (is5Full.isOn)
+        {
+            rightThirdBulb.GetComponent<Renderer>().material = unlit;
+            leftThirdBulb.GetComponent<Renderer>().material = unlit;
+
+            RT();
+        }
+        else
+        {
+            RT();
+        }
+    }
+
     public float randomStartTime()
     {
         // Generate Random Start of the Tree from half a second to three seconds
         float randomStart = Random.Range(1f, 2f);
-        Debug.Log(randomStart);
         randomStartGenerated = true;
         return randomStart;
     }
+    public float generaterandomRT()
+    {
+        // Generate Random RT For The Bot
+        float randomRt = Random.Range(.01f, .05f);
+
+        Debug.Log(randomRt);
+        return randomRt;
+    }
+
     IEnumerator FiveTenthsProTree()
     {
         yield return new WaitForSeconds(.5f);
@@ -260,6 +319,8 @@ public class TreeControler : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         rightFirstBulb.GetComponent<Renderer>().material = unlit;
+        leftFirstBulb.GetComponent<Renderer>().material = unlit;
+
 
         //Check To See If They RedLighted Before Lighting Next Bulb
         if (StageControl.isStaged == false)
@@ -276,6 +337,8 @@ public class TreeControler : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         rightSecondBulb.GetComponent<Renderer>().material = unlit;
+        leftSecondBulb.GetComponent<Renderer>().material = unlit;
+
 
         //Check To See If They RedLighted Before Lighting Next Bulb
         if (StageControl.isStaged == false)
@@ -310,6 +373,8 @@ public class TreeControler : MonoBehaviour
         // Make Sure the Green and Red get Unlit
         rightGreenBulb.GetComponent<Renderer>().material = unlit;
         rightRedBulb.GetComponent<Renderer>().material = unlit;
+        leftGreenBulb.GetComponent<Renderer>().material = unlit;
+        leftRedBulb.GetComponent<Renderer>().material = unlit;
 
         //Reset the RT to zero
         stageControl.resetRT();
@@ -336,7 +401,6 @@ public class TreeControler : MonoBehaviour
 
 
     }
-
 
 
 }
