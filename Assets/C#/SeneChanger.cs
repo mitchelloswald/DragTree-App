@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneChanger : MonoBehaviour
+
+public class SeneChanger : MonoBehaviour
 {
     public void playSinglePlayer()
     {
@@ -13,5 +14,4 @@ public class SceneChanger : MonoBehaviour
     {
         SceneManager.LoadScene("MainMenu");
     }
-
 }
